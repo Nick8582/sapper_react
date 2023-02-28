@@ -1,0 +1,25 @@
+.header {
+  background-color: #a8a8a8;
+}
+.header__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header__logo {
+  max-width: 80px;
+  max-height: 80px;
+}
+
+.header__right {
+  text-align: end;
+}
+
+.header__title {
+  margin: 0;
+  font-size: 40px;
+}
+
+.header__description {
+  margin: 0;
+}
