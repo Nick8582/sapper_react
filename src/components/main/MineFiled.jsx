@@ -1,6 +1,10 @@
 import React from 'react';
 import Cell from '../cell/Cell';
 import './MineFiled.css';
+import defaultImg from '../../images/smile-default.png';
+import winImg from '../../images/smile-win.png';
+import loseImg from '../../images/smile-lose.png'
+const zeroPad = (num, places) => String(num).padStart(places, '0');
 
 class MineField extends React.Component {
   constructor(props) {
@@ -12,6 +16,7 @@ class MineField extends React.Component {
       minesLeft: mines,
       fieldsToDiscover: (height * width) - mines,
       gameOver: false,
+      seconds: props.seconds,
     };
     this.planMinesOnBoard(bricks, mines);
   }
@@ -26,6 +31,7 @@ class MineField extends React.Component {
         isFlagged: false,
         neighborMinesCount: 0,
         isGameLost: false,
+        isTimeOut: false,
       }))
     );
   }
@@ -71,15 +77,44 @@ class MineField extends React.Component {
   selectedMine(brick) {
     const shouldBeDiscover = chosenBrick => chosenBrick.isDiscovered ||
       (chosenBrick.row === brick.row && chosenBrick.col === brick.col);
-
     let newBoardState = this.state.bricksInGame.map(rows =>
       rows.map(brick => ({
         ...brick,
         isDiscovered: shouldBeDiscover(brick),
-        isGameLost: true
+        isGameLost: true,
+      })));
+    this.setState({bricksInGame: newBoardState});
+  }
+
+  start = () => {
+    if(this.props.seconds === this.state.seconds) {
+      this.timerID = setInterval(() => this.tick(), 1000);
+    }
+  }
+
+  stop = () => {
+    clearInterval(this.timerID);
+  }
+
+  stopGame() {
+    let newTimeOut = this.state.bricksInGame.map(rows =>
+      rows.map(brick => ({
+        ...brick,
+        isTimeOut: true,
       })));
 
-    this.setState({bricksInGame: newBoardState});
+    this.setState({bricksInGame: newTimeOut})
+    console.log(this.state.isTimeOut)
+  }
+
+  tick() {
+    const oldsec = this.state.seconds;
+    if (oldsec > 0) {
+      this.setState({seconds: oldsec - 1});
+    } else {
+      this.stop();
+      this.stopGame()
+    }
   }
 
   discoverBricks(row, col) {
@@ -122,10 +157,11 @@ class MineField extends React.Component {
 
   onClickHandle(brick) {
     if (this.isGameFinished() || brick.isDiscovered || brick.isFlagged) return;
-
     if (brick.isMine) {
+      this.stop()
       this.selectedMine(brick);
     } else {
+      this.start()
       this.discoverBricks(brick.row, brick.col);
     }
   }
@@ -142,7 +178,7 @@ class MineField extends React.Component {
   }
 
   isGameLost = () => [].concat(...this.state.bricksInGame)
-    .some(brick => brick.isMine === true && brick.isDiscovered === true);
+    .some(brick => (brick.isMine === true && brick.isDiscovered === true) || brick.isTimeOut === true);
 
   isGameWon = () => this.countDiscoveredFields() === this.state.fieldsToDiscover;
 
@@ -150,7 +186,7 @@ class MineField extends React.Component {
 
   countDiscoveredFields = () => [].concat(...this.state.bricksInGame).filter(brick => brick.isDiscovered).length;
 
-  gameStatus = () => this.isGameLost() ? "You lose..." : this.isGameWon() ? "You win!" : "Game in progress";
+  gameStatus = () => this.isGameLost() ? loseImg : this.isGameWon() ? winImg : defaultImg;
 
   renderBricks(bricks) {
     return bricks.map(rows =>
@@ -178,13 +214,16 @@ class MineField extends React.Component {
   };
 
   render() {
-    return <div className="board-container">
-      <div className="score-menu">
-        <div className="game-status">
-          <label>{this.gameStatus()}</label>
+    return <div className="game container">
+      <div className='game__control'>
+        <div className='game__flag'>
+          {zeroPad(this.state.minesLeft)}
         </div>
-        <div className="flag-counter">
-          <label>Bombs left: {this.state.minesLeft}</label>
+        <button className="game__btn" onClick={() => this.props.restart()}>
+          <img className="game__smile" src={`${this.gameStatus()}`} alt=""/>
+        </button>
+        <div className='game__time'>
+          {zeroPad(this.state.seconds, 4)}
         </div>
       </div>
       <div className="game__mine">
@@ -193,6 +232,5 @@ class MineField extends React.Component {
     </div>
   }
 }
-
 
 export default MineField;

@@ -36,7 +36,6 @@ let Cell = (props) => {
       return null;
     }
   }
-
   return <button
     className={className}
     onClick={props.onClick}

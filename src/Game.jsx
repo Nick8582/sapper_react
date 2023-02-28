@@ -1,11 +1,7 @@
 import React from "react";
 import MineField from './components/main/MineFiled';
-import defaultImg from './images/smile-default.png';
-import winImg from './images/smile-win.png';
-import loseImg from './images/smile-lose.png'
 import './Game.css'
 
-const zeroPad = (num, places) => String(num).padStart(places, '0');
 
 class Game extends React.Component {
   constructor(props) {
@@ -31,11 +27,7 @@ class Game extends React.Component {
   //   });
   // }
 
-  updateData = (img) => {
-    this.setState({image: img})
-  }
-
-  newGame() {
+  newGame = () => {
     this.setState({
       gamePlayedCount: this.state.gamePlayedCount + 1,
     });
@@ -44,25 +36,14 @@ class Game extends React.Component {
   render() {
     const {height, width, mines} = this.state;
     return (
-      <div className='game container'>
-        <div className='game__control'>
-          <div className='game__flag'>
-            {zeroPad(0)}
-          </div>
-          <button className="game__btn" onClick={()=> this.newGame()}>
-            <img className="game__smile" src={`${this.updateData}`} alt=""/>
-          </button>
-          <div className='game__time'>
-            {zeroPad(2400, 4)}
-          </div>
-        </div>
-
+      <div className=''>
         <MineField
           key={this.state.gamePlayedCount}
           height={height}
           width={width}
           mines={mines}
-          image={this.updateData}
+          restart={this.newGame}
+          seconds='10'
         />
       </div>
     );
