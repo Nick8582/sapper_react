@@ -59,6 +59,23 @@
   height: 100%;
 }
 
+.game__smile--red {
+  background: red;
+}
+
+.game__smile--defuse {
+  position: relative;
+}
+
+.game__smile--defuse::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  border: 3px solid red;
+}
+
 .game__time {
   width: 84px;
   position: relative;

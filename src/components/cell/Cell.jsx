@@ -1,11 +1,9 @@
 import React from 'react';
-
+import bomb from '../../images/bomb.png';
+import bombDef from '../../images/bomb-def.png';
+import flag from '../../images/flag.png';
 
 let Cell = (props) => {
-  const bombEmoji = "☣️";
-  const explosionEmoji = "👾️";
-  const flagEmoji = "🚩";
-  const falseFlagEmoji = "❌";
   const whatEmoji = "?";
   const {neighborMinesCount, isMine, isDiscovered, isFlagged, isWhat} = props;
   const className = props.isDiscovered ?
@@ -14,13 +12,13 @@ let Cell = (props) => {
 
   function getGameOverDisplayedIcon() {
     if (isFlagged && isMine) {
-      return flagEmoji;
+      return <img src={flag} className='game__smile'/>;
     } else if (isFlagged && !isMine) {
-      return falseFlagEmoji;
+      return <img src={bombDef} className='game__smile'/>;
     } else if (isMine && isDiscovered) {
-      return explosionEmoji;
+      return <img src={bomb} className='game__smile game__smile--red'/>;
     } else if (isMine) {
-      return bombEmoji;
+      return <img src={bomb} className='game__smile'/>;
     } else {
       return neighborMinesCount;
     }
@@ -28,9 +26,9 @@ let Cell = (props) => {
 
   function getDisplayedValue() {
     if (isDiscovered && isMine) {
-      return explosionEmoji;
+      return <img src={bomb} className='game__smile red'/>;
     } else if (isFlagged) {
-      return flagEmoji;
+      return <img src={flag} className='game__smile'/>;
     } else if (isWhat) {
       return whatEmoji;
     } else if (isDiscovered) {
