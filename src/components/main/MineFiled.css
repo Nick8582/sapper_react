@@ -1,7 +1,10 @@
 .game__mine {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: repeat(16, 1fr);
+  /*display: flex;*/
+  /*flex-direction: row;*/
+  /*flex-wrap: wrap;*/
   border-top: 3px solid #7b7b7b;
   border-left: 3px solid #7b7b7b;
   border-bottom: 3px solid #fff;

@@ -80,8 +80,8 @@
 }
 
 .game__cell {
-  width: 6.25%;
-  height: 60px;
+  width: 100%;
+  aspect-ratio: 1/1;
 }
 
 .game__cell.active {
