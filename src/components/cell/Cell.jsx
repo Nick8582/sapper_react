@@ -6,7 +6,8 @@ let Cell = (props) => {
   const explosionEmoji = "👾️";
   const flagEmoji = "🚩";
   const falseFlagEmoji = "❌";
-  const {neighborMinesCount, isMine, isDiscovered, isFlagged} = props;
+  const whatEmoji = "?";
+  const {neighborMinesCount, isMine, isDiscovered, isFlagged, isWhat} = props;
   const className = props.isDiscovered ?
     `square square-revealed square-${props.neighborMinesCount}` :
     "square";
@@ -30,6 +31,8 @@ let Cell = (props) => {
       return explosionEmoji;
     } else if (isFlagged) {
       return flagEmoji;
+    } else if (isWhat) {
+      return whatEmoji;
     } else if (isDiscovered) {
       return neighborMinesCount;
     } else {

@@ -16,6 +16,7 @@ class MineField extends React.Component {
       minesLeft: mines,
       fieldsToDiscover: (height * width) - mines,
       gameOver: false,
+      gamePlay: false,
       seconds: props.seconds,
     };
     this.planMinesOnBoard(bricks, mines);
@@ -29,6 +30,7 @@ class MineField extends React.Component {
         isMine: false,
         isDiscovered: false,
         isFlagged: false,
+        isWhat: false,
         neighborMinesCount: 0,
         isGameLost: false,
         isTimeOut: false,
@@ -103,8 +105,11 @@ class MineField extends React.Component {
         isTimeOut: true,
       })));
 
-    this.setState({bricksInGame: newTimeOut})
-    console.log(this.state.isTimeOut)
+    this.setState({
+      bricksInGame: newTimeOut,
+      gamePlay: false
+    })
+    this.stop()
   }
 
   tick() {
@@ -156,25 +161,43 @@ class MineField extends React.Component {
   }
 
   onClickHandle(brick) {
-    if (this.isGameFinished() || brick.isDiscovered || brick.isFlagged) return;
+    if (this.isGameFinished() || brick.isDiscovered || brick.isFlagged || brick.isWhat) return;
+    if(this.state.gamePlay === false) {
+      this.start()
+    }
+    this.setState({gamePlay: true})
     if (brick.isMine) {
       this.stop()
       this.selectedMine(brick);
     } else {
-      this.start()
       this.discoverBricks(brick.row, brick.col);
     }
   }
 
   onContextMenuHandle(event, brick) {
     event.preventDefault();
-    if (this.isGameFinished() || brick.isDiscovered) return;
+    if(this.state.minesLeft > 0) {
+      if(this.state.gamePlay === false) {
+        this.start()
+      }
+      if (this.isGameFinished() || brick.isDiscovered) return;
 
-    brick.isFlagged ? brick.isFlagged = false : brick.isFlagged = true;
-    let updatedMinesToFlag = brick.isFlagged ? this.state.minesLeft - 1 : this.state.minesLeft + 1;
-    this.setState({
-      minesLeft: updatedMinesToFlag
-    });
+      if ((brick.isFlagged === false) && (brick.isWhat === false)) {
+        brick.isFlagged ? brick.isFlagged = false : brick.isFlagged = true;
+        this.setState({
+          gamePlay: true,
+          minesLeft: this.state.minesLeft - 1
+        });
+      } else if (brick.isFlagged === true) {
+        brick.isFlagged = false;
+        brick.isWhat = true;
+        this.setState({
+          minesLeft: this.state.minesLeft + 1
+        });
+      } else {
+        brick.isWhat = false;
+      }
+    }
   }
 
   isGameLost = () => [].concat(...this.state.bricksInGame)
@@ -197,6 +220,7 @@ class MineField extends React.Component {
             col={brick.col}
             isMine={brick.isMine}
             isDiscovered={brick.isDiscovered}
+            isWhat={brick.isWhat}
             isFlagged={brick.isFlagged}
             neighborMinesCount={brick.neighborMinesCount}
             isGameLost={brick.isGameLost}
