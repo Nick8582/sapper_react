@@ -42,7 +42,10 @@ let Cell = (props) => {
   return <button
     className={className}
     onClick={props.onClick}
-    onContextMenu={props.onContextMenu}>
+    onContextMenu={props.onContextMenu}
+    onMouseDown={props.isMouseDown}
+    onMouseUp={props.isMouseUp}
+    >
     {props.isGameLost ? getGameOverDisplayedIcon() : getDisplayedValue()}
   </button>
 }

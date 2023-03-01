@@ -3,7 +3,8 @@ import Cell from '../cell/Cell';
 import './MineFiled.css';
 import defaultImg from '../../images/smile-default.png';
 import winImg from '../../images/smile-win.png';
-import loseImg from '../../images/smile-lose.png'
+import loseImg from '../../images/smile-lose.png';
+import wowImg from '../../images/smile-wow.png';
 
 const zeroPad = (num, places) => String(num).padStart(places, '0');
 
@@ -19,6 +20,7 @@ class MineField extends React.Component {
       gameOver: false,
       gamePlay: false,
       seconds: props.seconds,
+      isMouseDown: false,
     };
     this.planMinesOnBoard(bricks, mines);
   }
@@ -207,11 +209,19 @@ class MineField extends React.Component {
 
   isGameWon = () => this.countDiscoveredFields() === this.state.fieldsToDiscover;
 
+  isMouseDown = () => {
+    this.setState({isMouseDown: true})
+  }
+
+  isMouseUp = () => {
+    this.setState({isMouseDown: false})
+  }
+
   isGameFinished = () => this.isGameLost() || this.isGameWon();
 
   countDiscoveredFields = () => [].concat(...this.state.bricksInGame).filter(brick => brick.isDiscovered).length;
 
-  gameStatus = () => this.isGameLost() ? loseImg : this.isGameWon() ? winImg : defaultImg;
+  gameStatus = () => this.isGameLost() ? loseImg : this.isGameWon() ? winImg : this.state.isMouseDown ? wowImg : defaultImg;
 
   renderBricks(bricks) {
     return bricks.map(rows =>
@@ -232,6 +242,8 @@ class MineField extends React.Component {
             onContextMenu={(e) => {
               this.onContextMenuHandle(e, brick)
             }}
+            isMouseDown={this.isMouseDown}
+            isMouseUp={this.isMouseUp}
           />
           {brick.col === this.props.width - 1 ? <div className="end-row"/> : ""}
         </div>
