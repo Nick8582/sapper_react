@@ -4,6 +4,7 @@ import './MineFiled.css';
 import defaultImg from '../../images/smile-default.png';
 import winImg from '../../images/smile-win.png';
 import loseImg from '../../images/smile-lose.png'
+
 const zeroPad = (num, places) => String(num).padStart(places, '0');
 
 class MineField extends React.Component {
@@ -37,6 +38,7 @@ class MineField extends React.Component {
       }))
     );
   }
+
   planMinesOnBoard(bricksInGame, minesNumber) {
     let plantedBombs = 0;
 
@@ -89,7 +91,7 @@ class MineField extends React.Component {
   }
 
   start = () => {
-    if(this.props.seconds === this.state.seconds) {
+    if (this.props.seconds === this.state.seconds) {
       this.timerID = setInterval(() => this.tick(), 1000);
     }
   }
@@ -162,7 +164,7 @@ class MineField extends React.Component {
 
   onClickHandle(brick) {
     if (this.isGameFinished() || brick.isDiscovered || brick.isFlagged || brick.isWhat) return;
-    if(this.state.gamePlay === false) {
+    if (this.state.gamePlay === false) {
       this.start()
     }
     this.setState({gamePlay: true})
@@ -176,27 +178,27 @@ class MineField extends React.Component {
 
   onContextMenuHandle(event, brick) {
     event.preventDefault();
-    if(this.state.minesLeft > 0) {
-      if(this.state.gamePlay === false) {
-        this.start()
-      }
-      if (this.isGameFinished() || brick.isDiscovered) return;
+    if (this.state.gamePlay === false) {
+      this.start()
+    }
+    if (this.isGameFinished() || brick.isDiscovered) return;
 
-      if ((brick.isFlagged === false) && (brick.isWhat === false)) {
+    if ((brick.isFlagged === false) && (brick.isWhat === false)) {
+      if (this.state.minesLeft > 0) {
         brick.isFlagged ? brick.isFlagged = false : brick.isFlagged = true;
         this.setState({
           gamePlay: true,
           minesLeft: this.state.minesLeft - 1
         });
-      } else if (brick.isFlagged === true) {
-        brick.isFlagged = false;
-        brick.isWhat = true;
-        this.setState({
-          minesLeft: this.state.minesLeft + 1
-        });
-      } else {
-        brick.isWhat = false;
       }
+    } else if (brick.isFlagged === true) {
+      brick.isFlagged = false;
+      brick.isWhat = true;
+      this.setState({
+        minesLeft: this.state.minesLeft + 1
+      });
+    } else {
+      brick.isWhat = false;
     }
   }
 
@@ -251,7 +253,7 @@ class MineField extends React.Component {
         </div>
       </div>
       <div className="game__mine">
-          {this.renderBricks(this.state.bricksInGame)}
+        {this.renderBricks(this.state.bricksInGame)}
       </div>
     </div>
   }
