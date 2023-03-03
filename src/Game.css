@@ -169,3 +169,30 @@
 .square-8 {
   color: grey;
 }
+@media (max-width: 670px) {
+  .square {
+    line-height: 1;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 430px) {
+  .square {
+    font-size: 12px;
+  }
+  .game__flag, .game__time {
+    width: 63px;
+    font-size: 30px;
+    line-height: 1;
+    text-align: end;
+  }
+  .game__flag:before, .game__time:before {
+    font-size: 30px;
+    line-height: 1;
+    right: 0;
+  }
+  .game__btn {
+    width: 30px;
+    height: 30px;
+  }
+}
