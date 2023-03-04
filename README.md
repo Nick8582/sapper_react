@@ -1,3 +1,8 @@
+# Игра саппер
+
+Для запуска этого репозитория необходимо скачать пакеты с помощью команды `npm i`       
+После скачаивания необходимо запустить `npm start`
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
